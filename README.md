@@ -18,7 +18,7 @@ If you want to run the builder locally:
 2. Click on a button to set its destination URL.
 3. Click **Export** to get your `index.html`.
 4. Upload your file to GitHub Pages to go live!
-5. For more, visit "https://github.com/ship-it-afk/AWC/SUPPORT.md"
+5. For more, visit "https://github.com/techambient/AWB/SUPPORT.md"
 
 ## 🤝 Contributing
 We love help! Please feel free to fork the repo and submit pull requests.
