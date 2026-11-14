@@ -1,442 +1,380 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ambient Web Builder</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <style>
-        :root {
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --bg-main: #0f172a;
-            --bg-panel: rgba(30, 41, 59, 0.7);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #f8fafc;
-            --text-muted: #94a3b8;
-            --glass: blur(12px);
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ambient Web Builder - A Drag & Drop Website Builder</title>
+<meta name="description"
+  content="A no-code drag and drop website builder. ">
+<meta name="robots"
+  content="index, follow">
+<link rel="canonical"
+  href="https://techambient.github.io/AWB">
+<link rel="icon" type="image/ico" href="icon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
-        body {
-            display: flex; height: 100vh; margin: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-main); color: var(--text);
-            overflow: hidden; user-select: none;
-        }
+<!-- Google reCAPTCHA -->
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
-        #sidebar {
-            width: 280px; background: var(--bg-panel);
-            backdrop-filter: var(--glass); border-right: 1px solid var(--border);
-            padding: 24px; display: flex; flex-direction: column; gap: 12px; z-index: 100;
-        }
+<!-- Google Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Ambient Web Builder",
+  "operatingSystem": "Windows 11, Windows 10, Android, Web",
+  "applicationCategory": "DeveloperApplication",
+  "softwareVersion": "1.0.0",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "downloadUrl": "https://github.com/techambient/AWB/releases/latest",
+  "screenshot": "https://github.com/techambient/AWB/raw/main/screenshot.png",
+  "description": "A no-code drag and drop website builder."
+}
+</script>
+  
+<style>
+:root{
+--bg:#040508;--panel:rgba(255,255,255,.06);--border:rgba(255,255,255,.12);
+--txt:#fff;--muted:#b6bfca;--a:#3b82f6;--b:#7c3aed;--c:#06b6d4;
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);font-family:Inter,sans-serif;color:var(--txt);overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;background:
+radial-gradient(circle at 20% 20%,rgba(59,130,246,.22),transparent 35%),
+radial-gradient(circle at 80% 20%,rgba(124,58,237,.18),transparent 35%),
+radial-gradient(circle at 50% 100%,rgba(6,182,212,.18),transparent 40%);
+filter:blur(60px);z-index:-2}
+nav{position:fixed;top:0;left:0;right:0;z-index:99;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(18px);background:rgba(4,5,8,.45);border-bottom:1px solid var(--border)}
+.logo{font-weight:900;letter-spacing:.5px}
+.hero{min-height:100vh;position:relative;display:grid;place-items:center;text-align:center}
+.hero-bg{position:absolute;inset:0;background:url('https://github.com/techambient/AWB/raw/main/screenshot.png') center/cover no-repeat}
+.hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,5,8,.2),rgba(4,5,8,.92))}
+.hero-content{position:relative;z-index:2;padding:140px 24px}
+.badge{display:inline-block;padding:10px 16px;border:1px solid var(--border);background:#ffffff0f;border-radius:999px;backdrop-filter:blur(20px)}
+h1{font-size:clamp(3rem,8vw,7rem);margin:18px 0;font-weight:900}
+.sub{max-width:850px;margin:auto;color:var(--muted);font-size:1.2rem;line-height:1.8}
+.cta{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.btn{padding:15px 24px;border-radius:18px;text-decoration:none;color:white;font-weight:700}
+.primary{background:linear-gradient(135deg,var(--a),var(--b))}
+.secondary{border:1px solid var(--border);background:#ffffff12}
+section{padding:100px 6%}
+.title{font-size:2.4rem;margin-bottom:30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+.card{background:var(--panel);border:1px solid var(--border);backdrop-filter:blur(24px);border-radius:28px;padding:28px;transition:.3s}
+.card:hover{transform:translateY(-6px)}
+.metric{font-size:3rem;font-weight:900;background:linear-gradient(135deg,#fff,#8ec5ff);-webkit-background-clip:text;color:transparent}
+table{width:100%;border-collapse:collapse}
+td,th{padding:18px;border:1px solid var(--border)}
+footer{text-align:center;padding:70px;color:var(--muted)}
 
-        h3 { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px; }
+/* Phone & Tablet Optimization Media Queries */
+@media (max-width: 768px) {
+  nav { padding: 14px 6%; font-size: 0.9rem; }
+  .hero-content { padding: 120px 16px 60px 16px; }
+  .badge { font-size: 0.85rem; padding: 8px 14px; line-height: 1.4; }
+  .sub { font-size: 1rem; line-height: 1.6; }
+  .cta { flex-direction: column; width: 100%; max-width: 320px; margin: 30px auto 0 auto; gap: 12px; }
+  .btn { width: 100%; text-align: center; padding: 14px 20px; }
+  section { padding: 60px 6%; }
+  .title { font-size: 1.8rem; margin-bottom: 20px; text-align: center; }
+  .grid { grid-template-columns: 1fr; gap: 16px; }
+  .card { padding: 20px; border-radius: 20px; }
+  .card:hover { transform: none; }
+  .metric { font-size: 2.5rem; }
+  td, th { padding: 12px 8px; font-size: 0.85rem; }
+  footer { padding: 40px 20px; font-size: 0.85rem; }
+}
 
-        .blueprint {
-            padding: 12px; background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border); border-radius: 12px;
-            cursor: grab; display: flex; align-items: center; gap: 12px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            font-weight: 500; font-size: 0.9rem;
-        }
-        .blueprint:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--accent); transform: translateY(-1px); }
-        .blueprint span { font-size: 20px; color: var(--accent); }
+/* reCAPTCHA modal */
+#captchaOverlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:100000;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(12px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
 
-        #canvas {
-            flex-grow: 1; position: relative; background-color: #020617;
-            overflow: auto; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
-            background-size: 30px 30px;
-            transition: background-color 0.3s ease;
-        }
+#captchaBox{
+  width:min(420px,100%);
+  background:rgba(20,22,28,.96);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 25px 80px rgba(0,0,0,.55);
+  text-align:center;
+}
 
-        .obj { position: absolute; min-width: 40px; min-height: 40px; box-sizing: border-box; border: 2px solid transparent; border-radius: 8px; transition: border-color 0.2s; }
-        .obj.selected { border: 2px solid var(--accent); z-index: 1000; box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1); }
+#captchaBox h2{
+  margin:0 0 10px;
+  font-size:1.35rem;
+}
 
-        .handle { position: absolute; width: 8px; height: 8px; background: var(--text); border: 2px solid var(--accent); border-radius: 50%; display: none; z-index: 10; }
-        .obj.selected .handle { display: block; }
-        
-        .nw { top: -5px; left: -5px; cursor: nw-resize; } .n { top: -5px; left: calc(50% - 5px); cursor: n-resize; }
-        .ne { top: -5px; right: -5px; cursor: ne-resize; } .w { top: calc(50% - 5px); left: -5px; cursor: w-resize; }
-        .e { top: calc(50% - 5px); right: -5px; cursor: e-resize; } .sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-        .s { bottom: -5px; left: calc(50% - 5px); cursor: s-resize; } .se { bottom: -5px; right: -5px; cursor: se-resize; }
+#captchaBox p{
+  margin:0 0 22px;
+  color:var(--muted);
+  line-height:1.5;
+}
 
-        .move-bar { 
-            position: absolute; top: -28px; left: 50%; transform: translateX(-50%);
-            width: 32px; height: 24px; background: var(--accent); 
-            cursor: move; border-radius: 6px 6px 0 0; display: none;
-            align-items: center; justify-content: center;
-        }
-        .obj.selected .move-bar { display: flex; }
+#captchaContainer{
+  display:flex;
+  justify-content:center;
+  overflow:hidden;
+}
 
-        .inner-content { width: 100%; height: 100%; pointer-events: none; overflow: hidden; display: flex; align-items: center; justify-content: center; border-radius: 6px; }
-        .comp-btn { background: var(--accent); color: white; border: none; width: 100%; height: 100%; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .comp-txt { color: var(--text); text-align: center; width: 100%; font-size: 1rem; }
-        .comp-img, .comp-vid { width: 100%; height: 100%; object-fit: cover; pointer-events: auto; background: #000; border-radius: 4px; }
-        .placeholder { font-size: 0.75rem; color: var(--text-muted); text-align: center; border: 1px dashed var(--border); width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
-        .comp-box { border: 1px dashed var(--accent); display: flex; gap: 12px; padding: 12px; width: 100%; height: 100%; box-sizing: border-box; pointer-events: auto !important; border-radius: 12px; background: rgba(99, 102, 241, 0.05); }
-        .v-arr { flex-direction: column; } .h-arr { flex-direction: row; }
-
-        .calc-body { 
-            background: #1e293b; width: 100%; height: 100%; border-radius: 12px; 
-            display: flex; flex-direction: column; padding: 10px; box-sizing: border-box;
-            pointer-events: auto !important; border: 1px solid var(--border);
-        }
-        .calc-display { 
-            background: #0f172a; color: #10b981; font-family: monospace; 
-            font-size: 1.2rem; padding: 10px; text-align: right; border-radius: 6px; margin-bottom: 8px;
-            border: 1px solid var(--border); overflow: hidden;
-        }
-        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex-grow: 1; }
-        .calc-btn { 
-            background: rgba(255,255,255,0.05); border: none; color: white; 
-            border-radius: 4px; font-size: 0.8rem; cursor: pointer; transition: 0.2s;
-        }
-        .calc-btn:hover { background: var(--accent); }
-        .calc-btn.op { background: rgba(99, 102, 241, 0.2); color: var(--accent); }
-
-        .context-menu { 
-            position: fixed; display: none; background: #1e293b; 
-            border: 1px solid var(--border); border-radius: 14px; padding: 6px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); z-index: 2000; min-width: 200px;
-            backdrop-filter: var(--glass);
-        }
-        .menu-item { 
-            padding: 10px 14px; cursor: pointer; font-size: 0.9rem; border-radius: 8px;
-            display: flex; align-items: center; gap: 12px; transition: background 0.2s;
-            color: var(--text);
-        }
-        .menu-item:hover { background: var(--accent); }
-        .menu-item span { font-size: 18px; opacity: 0.8; }
-        .menu-sep { height: 1px; background: var(--border); margin: 6px 0; }
-
-        .sidebar-action-btn { 
-            padding: 14px; border: none; border-radius: 12px; cursor: pointer; 
-            font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;
-            transition: all 0.2s;
-        }
-        #help-btn { background: rgba(255, 255, 255, 0.05); color: var(--text); border: 1px solid var(--border); margin-top: auto; }
-        #help-btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--accent); }
-        #export-btn { background: var(--accent); color: white; margin-top: 8px; }
-        #export-btn:hover { background: var(--accent-hover); transform: scale(1.02); }
-
-        input[type="file"], .hidden-input { display: none; }
-    </style>
+#captchaClose{
+  margin-top:20px;
+  padding:11px 20px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#ffffff10;
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+}
+</style>
 </head>
+
 <body>
 
-<div id="sidebar">
-    <h3>Ambient Web Builder</h3>
-    <div class="blueprint" draggable="true" data-type="button"><span class="material-symbols-rounded">smart_button</span> Button</div>
-    <div class="blueprint" draggable="true" data-type="text"><span class="material-symbols-rounded">text_fields</span> Text</div>
-    <div class="blueprint" draggable="true" data-type="image"><span class="material-symbols-rounded">image</span> Image</div>
-    <div class="blueprint" draggable="true" data-type="video"><span class="material-symbols-rounded">videocam</span> Video</div>
-    <div class="blueprint" draggable="true" data-type="v-box"><span class="material-symbols-rounded">view_column_2</span> Vertical Box</div>
-    <div class="blueprint" draggable="true" data-type="h-box"><span class="material-symbols-rounded">view_week</span> Horizontal Box</div>
-    <div class="blueprint" draggable="true" data-type="calc"><span class="material-symbols-rounded">calculate</span> Calculator</div>
-    
-    <button id="help-btn" class="sidebar-action-btn" onclick="window.open('help.html', '_blank')">
-        <span class="material-symbols-rounded">help</span> Help Center
+<nav>
+<div class="logo">Ambient Web Builder</div>
+<div>No-code • Drag & Drop</div>
+</nav>
+
+<div id="site">
+<header class="hero">
+<div class="hero-bg"></div>
+<div class="hero-content">
+<div class="badge">Drag & Drop Website Builder</div>
+<h1>Build websites<br>with no-code</h1>
+<p class="sub">Fast, private and open-sourced. No ads. No tracking. Unlimited usage.</p>
+
+<div class="cta">
+
+<a
+  class="btn primary"
+  href="https://github.com/techambient/AWB"
+  data-captcha-url="https://github.com/techambient/AWB">
+  View on GitHub
+</a>
+
+<a
+  class="btn secondary"
+  href="https://techambient.github.io/AWB/build.html"
+  data-captcha-url="https://techambient.github.io/AWB/build.html">
+  Build Now
+</a>
+
+</div>
+</div>
+</header>
+
+<section>
+<h2 class="title">Major Advantages</h2>
+<div class="grid">
+<div class="card"><div class="metric">✔</div><p>Reliable & fast</p></div>
+<div class="card"><div class="metric">∞</div><p>Unlimited free usage</p></div>
+<div class="card"><div class="metric">0%</div><p>Ads, telemetry and tracking.</p></div>
+<div class="card"><div class="metric">100%</div><p>Free & open source.</p></div>
+</div>
+</section>
+
+<section id="features">
+<h2 class="title">Major Features</h2>
+<div class="grid">
+<div class="card">Drag & Drop</div>
+<div class="card">Design with ease</div>
+<div class="card">No-code needed</div>
+<div class="card">Auto conversion to HTML</div>
+</div>
+</section>
+
+<section>
+<h2 class="title">Ambient Web Builder vs HTML</h2>
+<div class="card" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+<table>
+<tr><th>Aspects</th><th>AWB</th><th>HTML</th></tr>
+<tr><td>Coding</td><td>No need</td><td>Needed, essential</td></tr>
+<tr><td>Difficulty Level</td><td>Easy</td><td>Hard</td></tr>
+</table>
+</div>
+</section>
+
+<section>
+<div class="card" style="text-align:center">
+<h2>Build and design any websites with ease</h2>
+<p style="color:var(--muted)">Built for education, web developer and more.</p>
+</div>
+</section>
+
+<!-- BEGIN AADS AD UNIT 2456406 -->
+<div id="frame" style="width: 100%; margin: auto; position: relative; z-index: 99998; padding: 20px 0;">
+    <iframe data-aa='2456406' src='//acceptable.a-ads.com/2456406/?size=Adaptive' style='border:0; padding:0; width:70%; height:auto; overflow:hidden; display:block; margin:auto'></iframe>
+</div>
+<!-- END AADS AD UNIT 2456406 -->
+
+<footer>
+Ambient Web Builder • GPL-v3 Licensed • techambient
+</footer>
+</div>
+
+
+<!-- reCAPTCHA MODAL -->
+<div id="captchaOverlay">
+
+  <div id="captchaBox">
+
+    <h2>Verification Required</h2>
+
+    <p>
+      Please complete the verification below to continue.
+    </p>
+
+    <div id="captchaContainer">
+      <div
+        class="g-recaptcha"
+        data-sitekey="6LcJM9EtAAAAAGEonAslLEXn5-MgLrG8iEPHGH7u"
+        data-callback="captchaSuccess"
+        data-expired-callback="captchaExpired"
+        data-error-callback="captchaError">
+      </div>
+    </div>
+
+    <button id="captchaClose" type="button">
+      Cancel
     </button>
-    <button id="export-btn" class="sidebar-action-btn">
-        <span class="material-symbols-rounded">ios_share</span> Export index.html
-    </button>
+
+  </div>
+
 </div>
 
-<div id="canvas"></div>
-
-<input type="file" id="img-input" accept="image/*">
-<input type="file" id="vid-input" accept="video/*">
-<input type="color" id="color-picker" class="hidden-input">
-<input type="color" id="bg-color-picker" class="hidden-input">
-
-<div id="menu" class="context-menu">
-    <div class="menu-item" id="opt-text" onclick="changeText()"><span class="material-symbols-rounded">edit</span> Edit Content</div>
-    <div class="menu-item" id="opt-size" onclick="changeFontSize()"><span class="material-symbols-rounded">format_size</span> Text Size</div>
-    <div class="menu-item" id="opt-bold" onclick="toggleBold()"><span class="material-symbols-rounded">format_bold</span> Bold / Unbold</div>
-    <div class="menu-item" id="opt-color" onclick="triggerColor()"><span class="material-symbols-rounded">palette</span> Text Color</div>
-    <div class="menu-sep"></div>
-    <div class="menu-item" id="opt-img" onclick="setMediaSource('image')"><span class="material-symbols-rounded">add_photo_alternate</span> Change Image Source</div>
-    <div class="menu-item" id="opt-vid" onclick="setMediaSource('video')"><span class="material-symbols-rounded">video_library</span> Change Video Source</div>
-    <div class="menu-item" onclick="setTargetLink()"><span class="material-symbols-rounded">link</span> Set Target URL</div>
-    <div class="menu-sep"></div>
-    <div class="menu-item" onclick="deleteObj()" style="color: #f87171;"><span class="material-symbols-rounded">delete</span> Delete Object</div>
-</div>
-
-<div id="canvas-menu" class="context-menu">
-    <div class="menu-item" onclick="triggerBgColor()"><span class="material-symbols-rounded">format_paint</span> Change Background Color</div>
-</div>
 
 <script>
-    const canvas = document.getElementById('canvas');
-    const menu = document.getElementById('menu');
-    const canvasMenu = document.getElementById('canvas-menu');
-    const imgInput = document.getElementById('img-input');
-    const vidInput = document.getElementById('vid-input');
-    const colorPicker = document.getElementById('color-picker');
-    const bgColorPicker = document.getElementById('bg-color-picker');
-    
-    let activeAction = null, activeObj = null, currentHandle = null;
-    let startX, startY, startW, startH, startL, startT;
 
-    document.querySelectorAll('.blueprint').forEach(b => {
-        b.addEventListener('dragstart', e => e.dataTransfer.setData('type', e.target.dataset.type));
-    });
+let pendingURL = null;
 
-    canvas.addEventListener('dragover', e => e.preventDefault());
-    canvas.addEventListener('drop', e => {
-        e.preventDefault();
-        const type = e.dataTransfer.getData('type');
-        const targetContainer = e.target.closest('.comp-box') || canvas;
-        const rect = targetContainer.getBoundingClientRect();
-        createObject(type, e.clientX - rect.left, e.clientY - rect.top, targetContainer);
-    });
 
-    canvas.addEventListener('contextmenu', e => {
-        e.preventDefault();
-        if (e.target === canvas) {
-            hideMenus();
-            canvasMenu.style.display = 'block';
-            canvasMenu.style.left = e.clientX + 'px';
-            canvasMenu.style.top = e.clientY + 'px';
-        }
-    });
+/*
+ * Intercept BOTH buttons.
+ * Nothing is opened until reCAPTCHA succeeds.
+ */
+document.querySelectorAll('[data-captcha-url]').forEach(button => {
 
-    function createObject(type, x, y, parent) {
-        const obj = document.createElement('div');
-        obj.className = 'obj';
-        obj.dataset.type = type;
-        obj.dataset.targetUrl = ""; 
-        
-        if (parent === canvas) {
-            obj.style.left = x + 'px'; obj.style.top = y + 'px'; obj.style.position = 'absolute';
-        } else {
-            obj.style.position = 'relative';
-        }
+  button.addEventListener('click', function(event) {
 
-        obj.style.width = type === 'calc' ? '220px' : (type === 'video' ? '300px' : (type.includes('box') ? '200px' : '120px'));
-        obj.style.height = type === 'calc' ? '300px' : (type === 'video' ? '200px' : (type.includes('box') ? '150px' : '48px'));
+    event.preventDefault();
 
-        const moveBar = document.createElement('div');
-        moveBar.className = 'move-bar';
-        moveBar.innerHTML = '<span class="material-symbols-rounded" style="font-size:16px; color:white;">drag_indicator</span>';
-        obj.appendChild(moveBar);
+    pendingURL = this.dataset.captchaUrl;
 
-        ['nw', 'n', 'ne', 'w', 'e', 'sw', 's', 'se'].forEach(c => {
-            const h = document.createElement('div');
-            h.className = `handle ${c}`;
-            obj.appendChild(h);
-        });
+    document.getElementById('captchaOverlay').style.display = 'flex';
 
-        const inner = document.createElement('div');
-        inner.className = 'inner-content';
-        
-        if (type === 'button') inner.innerHTML = `<button class="comp-btn">Click Me</button>`;
-        else if (type === 'text') inner.innerHTML = `<div class="comp-txt">New Text</div>`;
-        else if (type === 'image') inner.innerHTML = `<div class="placeholder">Select Image</div>`;
-        else if (type === 'video') inner.innerHTML = `<div class="placeholder">Select Video</div>`;
-        else if (type === 'calc') {
-            inner.innerHTML = `<div class="calc-body"><div class="calc-display">0</div><div class="calc-grid">` + 
-            ['C','/','*','-','7','8','9','+','4','5','6','=','1','2','3','0'].map(v => 
-            `<button class="calc-btn ${isNaN(v)&&v!='.'?'op':''}" onclick="calcAction(this, '${v}')">${v}</button>`).join('') + 
-            `</div></div>`;
-        }
-        else inner.innerHTML = `<div class="comp-box ${type==='v-box'?'v-arr':'h-arr'}"></div>`;
-        
-        obj.appendChild(inner);
-        parent.appendChild(obj);
-
-        obj.addEventListener('mousedown', e => {
-            e.stopPropagation();
-            document.querySelectorAll('.obj').forEach(o => o.classList.remove('selected'));
-            obj.classList.add('selected');
-            activeObj = obj;
-
-            if (e.target.closest('.move-bar')) {
-                activeAction = 'move';
-                initTransform(e);
-            } else if (e.target.classList.contains('handle')) {
-                activeAction = 'resize';
-                currentHandle = e.target.classList[1];
-                initTransform(e);
-            }
-        });
-
-        obj.addEventListener('contextmenu', e => {
-            e.preventDefault(); e.stopPropagation();
-            activeObj = obj;
-            hideMenus();
-            menu.style.display = 'block';
-            menu.style.left = e.clientX + 'px';
-            menu.style.top = e.clientY + 'px';
-            
-            const isText = (type === 'button' || type === 'text');
-            document.getElementById('opt-text').style.display = isText ? 'flex' : 'none';
-            document.getElementById('opt-size').style.display = isText ? 'flex' : 'none';
-            document.getElementById('opt-bold').style.display = isText ? 'flex' : 'none';
-            document.getElementById('opt-color').style.display = isText ? 'flex' : 'none';
-            document.getElementById('opt-img').style.display = (type === 'image') ? 'flex' : 'none';
-            document.getElementById('opt-vid').style.display = (type === 'video') ? 'flex' : 'none';
-        });
+    /*
+     * Reset previous CAPTCHA state when opening again.
+     */
+    if (typeof grecaptcha !== 'undefined') {
+      try {
+        grecaptcha.reset();
+      } catch(e) {}
     }
 
-    function setTargetLink() {
-        const url = prompt("Enter Target URL (e.g., https://google.com):", activeObj.dataset.targetUrl);
-        if (url !== null) activeObj.dataset.targetUrl = url;
+  });
+
+});
+
+
+/*
+ * Called automatically by Google reCAPTCHA
+ * after the user successfully completes verification.
+ */
+function captchaSuccess(token) {
+
+  if (!token || !pendingURL) {
+    return;
+  }
+
+  const destination = pendingURL;
+
+  /*
+   * Clear the pending destination first.
+   */
+  pendingURL = null;
+
+  /*
+   * Hide CAPTCHA.
+   */
+  document.getElementById('captchaOverlay').style.display = 'none';
+
+  /*
+   * Redirect ONLY after successful CAPTCHA.
+   */
+  window.location.href = destination;
+}
+
+
+/*
+ * CAPTCHA expired.
+ */
+function captchaExpired() {
+  pendingURL = null;
+}
+
+
+/*
+ * CAPTCHA error.
+ */
+function captchaError() {
+  pendingURL = null;
+}
+
+
+/*
+ * Cancel button.
+ */
+document.getElementById('captchaClose').addEventListener('click', function() {
+
+  pendingURL = null;
+
+  document.getElementById('captchaOverlay').style.display = 'none';
+
+  if (typeof grecaptcha !== 'undefined') {
+    try {
+      grecaptcha.reset();
+    } catch(e) {}
+  }
+
+});
+
+
+/*
+ * Close the CAPTCHA by clicking outside the box.
+ */
+document.getElementById('captchaOverlay').addEventListener('click', function(event) {
+
+  if (event.target === this) {
+
+    pendingURL = null;
+
+    this.style.display = 'none';
+
+    if (typeof grecaptcha !== 'undefined') {
+      try {
+        grecaptcha.reset();
+      } catch(e) {}
     }
 
-    function setMediaSource(type) {
-        const choice = confirm("Press OK to Upload Local File, Cancel to enter a Web URL.");
-        if (choice) {
-            if (type === 'image') imgInput.click();
-            else vidInput.click();
-        } else {
-            const url = prompt(`Enter ${type} URL:`);
-            if (url) {
-                activeObj.dataset.realpath = url;
-                const inner = activeObj.querySelector('.inner-content');
-                inner.innerHTML = type === 'image' ? 
-                    `<img src="${url}" class="comp-img">` : 
-                    `<video src="${url}" class="comp-vid" controls></video>`;
-            }
-        }
-    }
+  }
 
-    imgInput.onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        activeObj.dataset.realpath = file.name;
-        activeObj.querySelector('.inner-content').innerHTML = `<img src="${URL.createObjectURL(file)}" class="comp-img">`;
-    };
+});
 
-    vidInput.onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        activeObj.dataset.realpath = file.name;
-        activeObj.querySelector('.inner-content').innerHTML = `<video src="${URL.createObjectURL(file)}" class="comp-vid" controls></video>`;
-    };
-
-    window.calcAction = (btn, val) => {
-        const display = btn.closest('.calc-body').querySelector('.calc-display');
-        if (val === 'C') display.innerText = '0';
-        else if (val === '=') { try { display.innerText = eval(display.innerText); } catch { display.innerText = 'Error'; } }
-        else {
-            if (display.innerText === '0' || display.innerText === 'Error') display.innerText = val;
-            else display.innerText += val;
-        }
-    };
-
-    function initTransform(e) {
-        startX = e.clientX; startY = e.clientY;
-        startW = activeObj.offsetWidth; startH = activeObj.offsetHeight;
-        startL = activeObj.offsetLeft; startT = activeObj.offsetTop;
-    }
-
-    window.addEventListener('mousemove', e => {
-        if (!activeObj || !activeAction) return;
-        const dx = e.clientX - startX; const dy = e.clientY - startY;
-        if (activeAction === 'move') {
-            activeObj.style.left = (startL + dx) + 'px';
-            activeObj.style.top = (startT + dy) + 'px';
-        } else if (activeAction === 'resize') {
-            if (currentHandle.includes('e')) activeObj.style.width = (startW + dx) + 'px';
-            if (currentHandle.includes('s')) activeObj.style.height = (startH + dy) + 'px';
-            if (currentHandle.includes('w')) { activeObj.style.width = (startW - dx) + 'px'; activeObj.style.left = (startL + dx) + 'px'; }
-            if (currentHandle.includes('n')) { activeObj.style.height = (startH - dy) + 'px'; activeObj.style.top = (startT + dy) + 'px'; }
-        }
-    });
-
-    window.addEventListener('mouseup', () => { activeAction = null; currentHandle = null; });
-    window.addEventListener('click', hideMenus);
-    function hideMenus() { menu.style.display = 'none'; canvasMenu.style.display = 'none'; }
-
-    function changeText() {
-        const target = activeObj.querySelector('.comp-btn, .comp-txt');
-        const val = prompt("Update Content:", target.innerText);
-        if (val) target.innerText = val;
-    }
-
-    function changeFontSize() {
-        const target = activeObj.querySelector('.comp-btn, .comp-txt');
-        const currentSize = window.getComputedStyle(target).fontSize.replace('px', '');
-        const val = prompt("Enter size (px):", currentSize);
-        if (val) target.style.fontSize = val + 'px';
-    }
-
-    function triggerColor() { colorPicker.click(); }
-    colorPicker.oninput = (e) => { activeObj.querySelector('.comp-btn, .comp-txt').style.color = e.target.value; };
-    function triggerBgColor() { bgColorPicker.click(); }
-    bgColorPicker.oninput = (e) => { canvas.style.backgroundColor = e.target.value; };
-    function toggleBold() {
-        const t = activeObj.querySelector('.comp-btn, .comp-txt');
-        t.style.fontWeight = (t.style.fontWeight === 'bold' || t.style.fontWeight === '700') ? 'normal' : 'bold';
-    }
-    function deleteObj() { activeObj.remove(); }
-
-    document.getElementById('export-btn').onclick = () => {
-        const finalBg = canvas.style.backgroundColor || '#020617';
-        let code = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
-            body { font-family: sans-serif; margin: 0; background-color: ${finalBg}; min-height: 100vh; overflow-x: hidden; position: relative; }
-            .btn { display: inline-flex; align-items: center; justify-content: center; background: #6366f1; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; width:100%; height:100%; border:none; }
-            .txt { display: flex; align-items: center; justify-content: center; text-align: center; color: white; width:100%; height:100%; }
-            .media { width: 100%; height: 100%; object-fit: cover; background: black; border-radius: 8px; }
-            .wrapper { position: absolute; box-sizing: border-box; text-decoration: none; }
-            
-            /* Calculator styles */
-            .calc-body { background: #1e293b; width: 100%; height: 100%; border-radius: 12px; display: flex; flex-direction: column; padding: 10px; box-sizing: border-box; border: 1px solid rgba(255,255,255,0.1); }
-            .calc-display { background: #0f172a; color: #10b981; font-family: monospace; font-size: 1.2rem; padding: 10px; text-align: right; border-radius: 6px; margin-bottom: 8px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-            .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; flex-grow: 1; }
-            .calc-btn { background: rgba(255,255,255,0.05); border: none; color: white; border-radius: 4px; font-size: 0.8rem; cursor: pointer; transition: 0.2s; }
-            .calc-btn:hover { background: #6366f1; }
-            .calc-btn.op { background: rgba(99, 102, 241, 0.2); color: #6366f1; }
-        </style></head><body>`;
-
-        canvas.querySelectorAll(':scope > .obj').forEach(obj => {
-            const type = obj.dataset.type;
-            const link = obj.dataset.targetUrl;
-            const style = `left:${obj.style.left}; top:${obj.style.top}; width:${obj.offsetWidth}px; height:${obj.offsetHeight}px;`;
-            
-            let content = "";
-            if (type === 'button') {
-                const btnText = obj.querySelector('.comp-btn').innerText;
-                content = `<a href="${link || '#'}" class="btn" ${link?'target="_blank"':''}>${btnText}</a>`;
-            } else if (type === 'text') {
-                const txt = obj.querySelector('.comp-txt');
-                content = `<div class="txt" style="font-size:${txt.style.fontSize}; font-weight:${txt.style.fontWeight}; color:${txt.style.color};">${txt.innerText}</div>`;
-            } else if (type === 'image') {
-                const src = obj.dataset.realpath || "";
-                content = `<img src="${src}" class="media">`;
-                if(link) content = `<a href="${link}" target="_blank">${content}</a>`;
-            } else if (type === 'video') {
-                const src = obj.dataset.realpath || "";
-                content = `<video src="${src}" class="media" controls></video>`;
-            } else if (type === 'calc') {
-                content = `<div class="calc-body"><div class="calc-display">0</div><div class="calc-grid">` + 
-                ['C','/','*','-','7','8','9','+','4','5','6','=','1','2','3','0'].map(v => 
-                `<button class="calc-btn ${isNaN(v)&&v!='.'?'op':''}" onclick="calcAction(this, '${v}')">${v}</button>`).join('') + 
-                `</div></div>`;
-            }
-
-            code += `<div class="wrapper" style="${style}">${content}</div>`;
-        });
-        
-        code += `
-        <script>
-            function calcAction(btn, val) {
-                const display = btn.closest('.calc-body').querySelector('.calc-display');
-                if (val === 'C') display.innerText = '0';
-                else if (val === '=') { try { display.innerText = eval(display.innerText); } catch { display.innerText = 'Error'; } }
-                else {
-                    if (display.innerText === '0' || display.innerText === 'Error') display.innerText = val;
-                    else display.innerText += val;
-                }
-            }
-        <\/script>
-        </body></html>`;
-
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(new Blob([code], {type:'text/html'}));
-        a.download = 'index.html'; a.click();
-    };
 </script>
+
 </body>
 </html>
