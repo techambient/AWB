@@ -1,0 +1,48 @@
+
+# Ambient Web Builder
+
+> Official website of Ambient Web Builder. 
+
+## Introduction
+
+Ambient Web Builder is a drag and drop website builder that does not requires any coding skills. 
+
+Build your website now at: https://techambient.github.io/AWB/build.html
+
+Download at: https://github.com/techambient/AWB/releases/latest
+
+Source code at: https://github.com/techambient/AWB/
+
+This website provides information about features, download URL, source code, and license documentation.
+
+## Main Pages
+
+- [Homepage](https://techambient.github.io/AWB)
+- [Build](https://techambient.github.io/AWB/build.html)
+- [Download](https://github.com/techambient/AWB/releases/latest)
+
+## Topics
+
+- website-builder
+- Website Builder
+- Website Development
+- Technology
+- Website
+- Webpage
+- Free
+- Projects
+- Open Source
+
+## Website Information
+
+Website: https://techambient.github.io/AWB
+
+Content Type: Public Website
+
+Content Format: HTML, Markdown and Documentation
+
+## Important Notes
+
+Please refer to the individual pages for the latest and most accurate information.
+
+All publicly available website content is intended to be accessible to web crawlers.
