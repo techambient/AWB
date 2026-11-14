@@ -1,0 +1,3 @@
+To install Ambient Web Builder, please run setup.bat
+
+To uninstall Ambient Web Builder, please run uninstall.bat
