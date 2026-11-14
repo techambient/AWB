@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f6fc" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#070b14" />
+  <title>Loading...</title>
+  <style>
+    /* =========================================================
+       1. ADAPTIVE DEVICE THEME TOKENS (LIGHT & DARK DEFAULT)
+    ========================================================= */
+    :root {
+      --bg-base: #f2f6fc;
+      --bg-gradient: radial-gradient(circle at 20% 18%, rgba(59, 130, 246, 0.14), transparent 52%),
+                     radial-gradient(circle at 82% 84%, rgba(14, 165, 233, 0.14), transparent 54%),
+                     linear-gradient(160deg, #f8fbff 0%, #ebf1fa 100%);
+      --orb-1: rgba(37, 99, 235, 0.22);
+      --orb-2: rgba(14, 165, 233, 0.20);
+      --orb-3: rgba(99, 102, 241, 0.14);
+
+      --glass-bg: rgba(255, 255, 255, 0.68);
+      --glass-bg-elevated: rgba(255, 255, 255, 0.86);
+      --glass-border: rgba(255, 255, 255, 0.92);
+      --glass-edge-highlight: rgba(255, 255, 255, 1);
+      --glass-shadow:
+        0 28px 70px -12px rgba(15, 23, 42, 0.12),
+        0 10px 26px -6px rgba(37, 99, 235, 0.08),
+        inset 0 1.5px 1px var(--glass-edge-highlight);
+
+      --accent-primary: #2563eb;
+      --accent-secondary: #0ea5e9;
+      --accent-tertiary: #6366f1;
+      --ring-pulse: rgba(37, 99, 235, 0.26);
+      --orbit-glow: rgba(37, 99, 235, 0.45);
+
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-shimmer: linear-gradient(
+        110deg,
+        #0f172a 32%,
+        #2563eb 50%,
+        #0f172a 68%
+      );
+
+      --track-bg: rgba(15, 23, 42, 0.08);
+      --track-border: rgba(15, 23, 42, 0.06);
+      --pill-bg: rgba(37, 99, 235, 0.08);
+      --pill-border: rgba(37, 99, 235, 0.16);
+      --pill-text: #1d4ed8;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-base: #070b14;
+        --bg-gradient: radial-gradient(circle at 18% 16%, rgba(56, 189, 248, 0.14), transparent 50%),
+                       radial-gradient(circle at 84% 82%, rgba(99, 102, 241, 0.16), transparent 54%),
+                       linear-gradient(160deg, #060912 0%, #0c1324 100%);
+        --orb-1: rgba(56, 189, 248, 0.22);
+        --orb-2: rgba(99, 102, 241, 0.22);
+        --orb-3: rgba(16, 185, 129, 0.12);
+
+        --glass-bg: rgba(17, 24, 42, 0.62);
+        --glass-bg-elevated: rgba(24, 34, 58, 0.78);
+        --glass-border: rgba(255, 255, 255, 0.12);
+        --glass-edge-highlight: rgba(255, 255, 255, 0.18);
+        --glass-shadow:
+          0 32px 80px -12px rgba(0, 0, 0, 0.68),
+          0 12px 32px -8px rgba(56, 189, 248, 0.12),
+          inset 0 1.5px 1px var(--glass-edge-highlight);
+
+        --accent-primary: #38bdf8;
+        --accent-secondary: #818cf8;
+        --accent-tertiary: #34d399;
+        --ring-pulse: rgba(56, 189, 248, 0.30);
+        --orbit-glow: rgba(56, 189, 248, 0.55);
+
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --text-shimmer: linear-gradient(
+          110deg,
+          #f8fafc 32%,
+          #7dd3fc 50%,
+          #f8fafc 68%
+        );
+
+        --track-bg: rgba(255, 255, 255, 0.08);
+        --track-border: rgba(255, 255, 255, 0.08);
+        --pill-bg: rgba(56, 189, 248, 0.12);
+        --pill-border: rgba(56, 189, 248, 0.24);
+        --pill-text: #7dd3fc;
+      }
+    }
+
+    /* =========================================================
+       2. GLOBAL RESET & FLUID VIEWPORT FOUNDATION
+    ========================================================= */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      min-height: 100dvh;
+      width: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-base);
+      background-image: var(--bg-gradient);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+      position: relative;
+      perspective: 1200px;
+      transition: background-color 0.45s ease, color 0.45s ease, opacity 0.28s ease;
+    }
+
+    body.page-exit {
+      opacity: 0;
+    }
+
+    body.page-exit .loader-card {
+      transform: scale(0.96) translateY(-8px);
+      opacity: 0;
+      filter: blur(6px);
+    }
+
+    /* =========================================================
+       3. ATMOSPHERIC AURORA & FINE GRAIN LAYER
+    ========================================================= */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .aurora-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(85px);
+      will-change: transform;
+      opacity: 0.92;
+    }
+
+    .aurora-orb.orb-1 {
+      width: clamp(280px, 52vw, 680px);
+      height: clamp(280px, 52vw, 680px);
+      top: -14%;
+      left: -12%;
+      background: var(--orb-1);
+      animation: auroraFloat1 12s ease-in-out infinite alternate;
+    }
+
+    .aurora-orb.orb-2 {
+      width: clamp(260px, 48vw, 640px);
+      height: clamp(260px, 48vw, 640px);
+      bottom: -16%;
+      right: -10%;
+      background: var(--orb-2);
+      animation: auroraFloat2 14s ease-in-out infinite alternate;
+    }
+
+    .aurora-orb.orb-3 {
+      width: clamp(200px, 36vw, 480px);
+      height: clamp(200px, 36vw, 480px);
+      top: 42%;
+      left: 52%;
+      transform: translate(-50%, -50%);
+      background: var(--orb-3);
+      animation: auroraPulse 9s ease-in-out infinite alternate;
+    }
+
+    /* Subtle anti-banding optical grain */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.028;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* =========================================================
+       4. LIQUID-GLASS LOADER CARD (ADAPTIVE & INTERACTIVE)
+    ========================================================= */
+    .loader-card {
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: clamp(300px, 86vw, 440px);
+      padding: clamp(30px, 6vw, 48px) clamp(24px, 5.5vw, 42px);
+      border-radius: clamp(26px, 4.5vw, 34px);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(32px) saturate(185%);
+      -webkit-backdrop-filter: blur(32px) saturate(185%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transform-style: preserve-3d;
+      transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
+      transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.3s ease,
+        filter 0.3s ease,
+        background-color 0.45s ease,
+        border-color 0.45s ease;
+      animation: cardSpringEnter 0.85s cubic-bezier(0.16, 1, 0.3, 1) both;
+      overflow: hidden;
+    }
+
+    /* Subtle top specular light refraction */
+    .loader-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.45) 0%,
+        rgba(255, 255, 255, 0.04) 45%,
+        rgba(56, 189, 248, 0.25) 100%
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    .card-content {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* =========================================================
+       5. KINETIC ICON STAGE (ORBITALS + RIPPLES + GLASS SHIMMER)
+    ========================================================= */
+    .icon-stage {
+      position: relative;
+      width: clamp(92px, 18vw, 118px);
+      height: clamp(92px, 18vw, 118px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(22px, 4.5vw, 30px);
+      flex-shrink: 0;
+    }
+
+    /* Expanding sonar pulse rings */
+    .pulse-ring {
+      position: absolute;
+      inset: 6%;
+      border-radius: 30%;
+      border: 1.5px solid var(--ring-pulse);
+      will-change: transform, opacity;
+      animation: sonarRipple 3s cubic-bezier(0.16, 0.84, 0.3, 1) infinite;
+    }
+
+    .pulse-ring:nth-child(2) {
+      animation-delay: 1s;
+    }
+
+    .pulse-ring:nth-child(3) {
+      animation-delay: 2s;
+    }
+
+    /* Rotating luminous orbital halo */
+    .orbit-halo {
+      position: absolute;
+      inset: 2%;
+      border-radius: 32%;
+      padding: 2px;
+      background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        transparent 210deg,
+        var(--accent-secondary) 295deg,
+        var(--accent-primary) 350deg,
+        transparent 360deg
+      );
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spinOrbit 2.4s linear infinite;
+      filter: drop-shadow(0 0 8px var(--orbit-glow));
+    }
+
+    /* Glass icon pedestal */
+    .icon-box {
+      position: relative;
+      z-index: 2;
+      width: 72%;
+      height: 72%;
+      border-radius: 26%;
+      background: var(--glass-bg-elevated);
+      border: 1px solid var(--glass-border);
+      box-shadow:
+        0 14px 30px -6px rgba(0, 0, 0, 0.16),
+        inset 0 1px 1px var(--glass-edge-highlight);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      animation: iconLevitate 3.4s ease-in-out infinite;
+      transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .icon-stage.phase-2 .icon-box {
+      animation: iconPulsePop 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), iconLevitate 3.4s ease-in-out 0.65s infinite;
+    }
+
+    /* Diagonal glass light sweep */
+    .icon-box::after {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -75%;
+      width: 55%;
+      height: 200%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.45),
+        transparent
+      );
+      transform: rotate(25deg);
+      animation: glassSweep 3.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .icon-box img {
+      width: 66%;
+      height: 66%;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .icon-fallback {
+      display: none;
+      width: 54%;
+      height: 54%;
+      color: var(--accent-primary);
+    }
+
+    .icon-box.is-fallback .icon-fallback {
+      display: block;
+    }
+
+    /* =========================================================
+       6. CHOREOGRAPHED STATUS TYPOGRAPHY & WAVE DOTS
+    ========================================================= */
+    .status-wrapper {
+      position: relative;
+      width: 100%;
+      min-height: clamp(50px, 8.5vw, 60px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: clamp(18px, 3.8vw, 24px);
+    }
+
+    .status-text {
+      position: absolute;
+      width: 100%;
+      font-size: clamp(1.06rem, 2.9vw, 1.28rem);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+      line-height: 1.35;
+      color: var(--text-primary);
+      background: var(--text-shimmer);
+      background-size: 220% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+      filter: blur(6px);
+      transition:
+        opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      will-change: transform, opacity, filter;
+    }
+
+    .status-text.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+      animation: textShimmerFlow 3.2s linear infinite;
+    }
+
+    .status-text.exit {
+      opacity: 0;
+      transform: translateY(-14px) scale(0.96);
+      filter: blur(6px);
+    }
+
+    /* Fluid wave dots (zero layout shift) */
+    .dot-wave {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-left: 5px;
+      vertical-align: middle;
+    }
+
+    .dot-wave span {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      display: inline-block;
+      animation: dotBounce 1.3s ease-in-out infinite;
+    }
+
+    .dot-wave span:nth-child(2) {
+      animation-delay: 0.16s;
+      background: var(--accent-secondary);
+    }
+
+    .dot-wave span:nth-child(3) {
+      animation-delay: 0.32s;
+      background: var(--accent-tertiary);
+    }
+
+    /* =========================================================
+       7. LUMINOUS PROGRESS CAPSULE & TELEMETRY PILL
+    ========================================================= */
+    .progress-section {
+      width: min(250px, 84%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--track-bg);
+      border: 1px solid var(--track-border);
+      overflow: hidden;
+      position: relative;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        var(--accent-primary),
+        var(--accent-secondary),
+        var(--accent-tertiary)
+      );
+      background-size: 200% 100%;
+      box-shadow: 0 0 14px var(--orbit-glow);
+      position: relative;
+      will-change: width;
+      animation: gradientSlide 2.2s linear infinite;
+    }
+
+    /* Bright leading edge spark */
+    .progress-fill::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 100%;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      filter: blur(2px);
+    }
+
+    .progress-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--pill-bg);
+      border: 1px solid var(--pill-border);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: var(--pill-text);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .status-led {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-primary);
+      box-shadow: 0 0 8px var(--accent-primary);
+      animation: ledPulse 1.4s ease-in-out infinite;
+    }
+
+    /* =========================================================
+       8. KEYFRAME CHOREOGRAPHY
+    ========================================================= */
+    @keyframes cardSpringEnter {
+      0% {
+        opacity: 0;
+        transform: translateY(24px) scale(0.93);
+        filter: blur(8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes iconLevitate {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes iconPulsePop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.09); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes sonarRipple {
+      0% {
+        transform: scale(0.76);
+        opacity: 0.8;
+      }
+      100% {
+        transform: scale(1.48);
+        opacity: 0;
+      }
+    }
+
+    @keyframes spinOrbit {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes glassSweep {
+      0%, 55% { transform: translateX(-140%) rotate(25deg); }
+      100% { transform: translateX(340%) rotate(25deg); }
+    }
+
+    @keyframes textShimmerFlow {
+      0% { background-position: 120% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    @keyframes dotBounce {
+      0%, 80%, 100% {
+        transform: translateY(0) scale(0.85);
+        opacity: 0.45;
+      }
+      40% {
+        transform: translateY(-4px) scale(1.15);
+        opacity: 1;
+      }
+    }
+
+    @keyframes gradientSlide {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    @keyframes ledPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.45; transform: scale(0.8); }
+    }
+
+    @keyframes auroraFloat1 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(36px, 28px) scale(1.1); }
+    }
+
+    @keyframes auroraFloat2 {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-34px, -26px) scale(1.12); }
+    }
+
+    @keyframes auroraPulse {
+      0% { transform: translate(-50%, -50%) scale(0.94); opacity: 0.7; }
+      100% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+    }
+
+    /* =========================================================
+       9. MULTI-DEVICE ADAPTIVE BREAKPOINTS (PHONE, LANDSCAPE, TABLET)
+    ========================================================= */
+    /* Compact phones (< 375px) */
+    @media (max-width: 374px) {
+      .loader-card {
+        padding: 26px 20px;
+        border-radius: 24px;
+      }
+      .icon-stage {
+        width: 84px;
+        height: 84px;
+        margin-bottom: 18px;
+      }
+    }
+
+    /* Mobile Landscape Mode: Adaptive Horizontal Split Layout */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .loader-card {
+        max-width: min(560px, 88vw);
+        padding: 22px 32px;
+        flex-direction: row;
+        text-align: left;
+        gap: 28px;
+      }
+      .icon-stage {
+        width: 88px;
+        height: 88px;
+        margin-bottom: 0;
+      }
+      .card-content {
+        align-items: flex-start;
+      }
+      .status-wrapper {
+        justify-content: flex-start;
+        min-height: 40px;
+        margin-bottom: 14px;
+      }
+      .progress-section {
+        width: 100%;
+        align-items: flex-start;
+      }
+    }
+
+    /* Tablets (iPad / Galaxy Tab / Lenovo Tab) */
+    @media (min-width: 768px) {
+      .loader-card {
+        max-width: 470px;
+        padding: 54px 46px;
+        border-radius: 36px;
+      }
+      .icon-stage {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 32px;
+      }
+      .status-text {
+        font-size: 1.32rem;
+      }
+      .progress-section {
+        width: 270px;
+      }
+    }
+
+    /* Reduced motion accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="aurora-orb orb-1"></div>
+    <div class="aurora-orb orb-2"></div>
+    <div class="aurora-orb orb-3"></div>
+  </div>
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <main id="loader-card" class="loader-card" role="status" aria-live="polite">
+    <div id="icon-stage" class="icon-stage">
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="pulse-ring"></div>
+      <div class="orbit-halo"></div>
+      <div id="icon-box" class="icon-box">
+        <img
+          src="icon.ico"
+          alt="Application Icon"
+          onerror="this.style.display='none'; document.getElementById('icon-box').classList.add('is-fallback');"
+        />
+        <svg class="icon-fallback" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+      </div>
+    </div>
+
+    <div class="card-content">
+      <div class="status-wrapper">
+        <p id="text-step-1" class="status-text active">
+          Please hang tight<span class="dot-wave" aria-hidden="true"><span></span><span></span><span></span></span>
+        </p>
+        <p id="text-step-2" class="status-text">
+          We are preparing for you<span class="dot-wave" aria-hidden="true"><span></span><span></span><span></span></span>
+        </p>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-track" aria-hidden="true">
+          <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <div class="progress-meta">
+          <span class="status-led" aria-hidden="true"></span>
+          <span id="progress-percent">0%</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    /* =========================================================================
+       PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+    ========================================================================= */
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxR18ov5IqdpI4QA-SLuIslgsXnxUawse1nl6T4aYclNvWuP6ziShbIX0L7K-xdJr41/exec";
+
+    const CONFIG = {
+      storageKey: "ambient_web_builder_counted",
+      redirectUrl: "ui.html",
+      textSwitchDelayMs: 1800, // Switches to "We are preparing for you" after 1.8s
+      totalMinDurationMs: 3800, // Minimum time to showcase both animations
+      maxNetworkWaitMs: 4500    // Safety timeout if network is slow
+    };
+
+    (function initLoader() {
+      const cardEl = document.getElementById("loader-card");
+      const iconStageEl = document.getElementById("icon-stage");
+      const step1El = document.getElementById("text-step-1");
+      const step2El = document.getElementById("text-step-2");
+      const progressFill = document.getElementById("progress-fill");
+      const progressPercent = document.getElementById("progress-percent");
+
+      // 1. 120fps requestAnimationFrame progress & percentage synchronization
+      const startTime = performance.now();
+      function animateProgress(now) {
+        const elapsed = now - startTime;
+        const linearProgress = Math.min(elapsed / CONFIG.totalMinDurationMs, 1);
+        // Smooth cubic-out ease
+        const easedProgress = 1 - Math.pow(1 - linearProgress, 2.6);
+        const pct = Math.round(easedProgress * 100);
+
+        progressFill.style.width = `${(easedProgress * 100).toFixed(2)}%`;
+        progressPercent.textContent = `${pct}%`;
+
+        if (linearProgress < 1) {
+          requestAnimationFrame(animateProgress);
+        }
+      }
+      requestAnimationFrame(animateProgress);
+
+      // 2. Subtle pointer/touch parallax tilt for tactile depth
+      const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      if (supportsHover) {
+        window.addEventListener("pointermove", (e) => {
+          const nx = (e.clientX / window.innerWidth - 0.5) * 2;
+          const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+          cardEl.style.setProperty("--tilt-x", `${(-ny * 5).toFixed(2)}deg`);
+          cardEl.style.setProperty("--tilt-y", `${(nx * 6).toFixed(2)}deg`);
+        }, { passive: true });
+
+        window.addEventListener("pointerleave", () => {
+          cardEl.style.setProperty("--tilt-x", "0deg");
+          cardEl.style.setProperty("--tilt-y", "0deg");
+        });
+      }
+
+      // 3. Schedule text morph: "Please hang tight" -> "We are preparing for you"
+      setTimeout(() => {
+        step1El.classList.remove("active");
+        step1El.classList.add("exit");
+        step2El.classList.add("active");
+        iconStageEl.classList.add("phase-2");
+      }, CONFIG.textSwitchDelayMs);
+
+      // 4. Safe localStorage helpers (handles strict private browsing gracefully)
+      function isAlreadyCounted() {
+        try {
+          return localStorage.getItem(CONFIG.storageKey) === "1";
+        } catch (e) {
+          return false;
+        }
+      }
+
+      function markAsCounted() {
+        try {
+          localStorage.setItem(CONFIG.storageKey, "1");
+        } catch (e) {
+          // Ignore storage quota/privacy mode errors
+        }
+      }
+
+      // 5. Check localStorage for "1" and increment Google Sheet cell A1 if not yet recorded
+      function trackVisitIfNeeded() {
+        const alreadyCounted = isAlreadyCounted();
+        const isUrlConfigured =
+          typeof APPS_SCRIPT_URL === "string" &&
+          APPS_SCRIPT_URL.startsWith("https://script.google.com/");
+
+        if (alreadyCounted || !isUrlConfigured) {
+          return Promise.resolve();
+        }
+
+        // mode: "no-cors" avoids Google Apps Script CORS preflight blocking while executing doPost()
+        return fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          keepalive: true
+        })
+          .then(() => {
+            markAsCounted();
+          })
+          .catch((err) => {
+            // Leave localStorage unset if offline so it can count on a future online visit
+            console.warn("Traffic counter skipped:", err);
+          });
+      }
+
+      // 6. Wait for both the animation duration and the background Sheet update, then exit smoothly
+      const minAnimationPromise = new Promise((resolve) =>
+        setTimeout(resolve, CONFIG.totalMinDurationMs)
+      );
+
+      const networkWithTimeout = Promise.race([
+        trackVisitIfNeeded(),
+        new Promise((resolve) => setTimeout(resolve, CONFIG.maxNetworkWaitMs))
+      ]);
+
+      Promise.all([minAnimationPromise, networkWithTimeout]).then(() => {
+        progressFill.style.width = "100%";
+        progressPercent.textContent = "100%";
+        document.body.classList.add("page-exit");
+        setTimeout(() => {
+          window.location.replace(CONFIG.redirectUrl);
+        }, 220);
+      });
+    })();
+  </script>
+</body>
+</html>
