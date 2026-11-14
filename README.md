@@ -10,8 +10,7 @@ A fully open-source Graphical User Interface (GUI) web creator that lets you bui
 
 ## 🛠 Installation
 If you want to run the builder locally:
-1. Clone the repo: `git clone https://github.com/ship-it-afk/awc.git`
-2. Open `index.html` in your browser (or run `npm install` if you have dependencies).
+1. Download Ambient Web Builder v2 from the releases section. 
 
 ## 📖 How to Use
 1. Drag components onto the canvas.
@@ -27,7 +26,7 @@ We love help! Please feel free to fork the repo and submit pull requests.
 I love help! Show your support by subscribing to my YouTube channel! Link: `https://www.youtube.com/@techambient` and `https://www.youtube.com/@technologiesambient`
 
 ## 📄 License
-This project is licensed under the MIT License.
+This project is licensed under the GPL-v3 License.
 
 ---
 
