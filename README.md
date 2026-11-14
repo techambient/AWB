@@ -1,3 +1,9 @@
+<div align="center">
+
+<img src="screenshot.png" width="100%"/>
+
+<img width="200" src="icon.ico" alt="Ambient Web Builder version 2 icon" align="center">
+
 # Ambient Web Builder 🎨
 
 A fully open-source Graphical User Interface (GUI) web creator that lets you build websites via drag-and-drop.
