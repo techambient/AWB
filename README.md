@@ -1,18 +1,21 @@
 <div align="center">
 
-<img src="screenshot.png" width="100%"/>
-
 <img width="200" src="icon.ico" alt="Ambient Web Builder version 2 icon" align="center">
 
 # Ambient Web Builder 🎨
 
 A fully open-source Graphical User Interface (GUI) web creator that lets you build websites via drag-and-drop.
 
+<div align="left">
+
 ## 🚀 Features
 * **Drag-and-Drop Interface:** No coding required to layout your site.
 * **Easy Linking:** Set target URLs for buttons directly in the editor.
 * **Instant Export:** Download your creation as a clean `index.html` file.
 * **Ready for Hosting:** Optimized for GitHub Pages or custom domains.
+
+## 📷Screenshots
+<img src="screenshot.png" width="100%"/>
 
 ## 🛠 Installation
 If you want to run the builder locally:
