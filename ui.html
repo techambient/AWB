@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ambient Web Builder</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<style id="awb-css">
+:root{--mica:#eeeeee;--layer:#f9f9f9;--card:#ffffff;--stroke:rgba(0,0,0,.0578);--stroke-b:rgba(0,0,0,.16);--stroke-s:rgba(0,0,0,.1);--text:#1a1a1a;--text2:rgba(0,0,0,.6063);--fill:rgba(255,255,255,.7);--fill-h:rgba(249,249,249,.5);--fill-p:rgba(249,249,249,.3);--sub-h:rgba(0,0,0,.0373);--sub-p:rgba(0,0,0,.0241);--accent:#0067c0;--accent-h:rgba(0,103,192,.9);--accent-p:rgba(0,103,192,.8);--on-accent:#fff;--danger:#c42b1c;--shadow:0 8px 16px rgba(0,0,0,.14);--scrim:rgba(0,0,0,.3);--dot:rgba(0,0,0,.3);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--mica:#202020;--layer:#272727;--card:#2d2d2d;--stroke:rgba(255,255,255,.0837);--stroke-b:rgba(255,255,255,.0837);--stroke-s:rgba(255,255,255,.12);--text:#fff;--text2:rgba(255,255,255,.786);--fill:rgba(255,255,255,.0605);--fill-h:rgba(255,255,255,.0837);--fill-p:rgba(255,255,255,.0326);--sub-h:rgba(255,255,255,.0605);--sub-p:rgba(255,255,255,.0419);--accent:#60cdff;--accent-h:rgba(96,205,255,.9);--accent-p:rgba(96,205,255,.8);--on-accent:#000;--danger:#ff99a4;--shadow:0 8px 16px rgba(0,0,0,.37);--scrim:rgba(0,0,0,.5);--dot:rgba(255,255,255,.26)}}
+:root[data-theme="dark"]{color-scheme:dark;--mica:#202020;--layer:#272727;--card:#2d2d2d;--stroke:rgba(255,255,255,.0837);--stroke-b:rgba(255,255,255,.0837);--stroke-s:rgba(255,255,255,.12);--text:#fff;--text2:rgba(255,255,255,.786);--fill:rgba(255,255,255,.0605);--fill-h:rgba(255,255,255,.0837);--fill-p:rgba(255,255,255,.0326);--sub-h:rgba(255,255,255,.0605);--sub-p:rgba(255,255,255,.0419);--accent:#60cdff;--accent-h:rgba(96,205,255,.9);--accent-p:rgba(96,205,255,.8);--on-accent:#000;--danger:#ff99a4;--shadow:0 8px 16px rgba(0,0,0,.37);--scrim:rgba(0,0,0,.5);--dot:rgba(255,255,255,.26)}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body,#root{height:100%;margin:0}
+body{font-family:"Segoe UI Variable Text","Segoe UI Variable","Segoe UI",system-ui,-apple-system,sans-serif;font-size:14px;line-height:20px;background:var(--mica);color:var(--text);overflow:hidden;-webkit-font-smoothing:antialiased;transition:background-color .25s linear,color .25s linear}
+h1,h2{font-family:"Segoe UI Variable Display","Segoe UI Variable","Segoe UI",system-ui,sans-serif;margin:0}
+:focus-visible{outline:2px solid var(--text);outline-offset:1px}
+::-webkit-scrollbar{width:12px;height:12px}::-webkit-scrollbar-thumb{background:var(--text2);border:4px solid transparent;border-radius:8px;background-clip:content-box;opacity:.5}
+.msr{font-family:'Material Symbols Outlined';font-size:18px;line-height:1;font-weight:400;font-style:normal;user-select:none;flex:none}
+.nav{position:relative;display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border-radius:4px;cursor:grab;transition:background-color 83ms linear,transform 83ms cubic-bezier(0,0,0,1)}
+.nav:hover{background:var(--sub-h)}.nav:active{background:var(--sub-p);transform:scale(.985)}
+.nav::before{content:"";position:absolute;left:0;top:12px;width:3px;height:16px;border-radius:2px;background:var(--accent);transform:scaleY(0);transition:transform 167ms cubic-bezier(0,0,0,1)}
+.nav:hover::before{transform:scaleY(1)}.nav .msr{color:var(--accent)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;height:32px;padding:0 12px;border-radius:4px;border:1px solid var(--stroke);border-bottom-color:var(--stroke-b);background:var(--fill);color:var(--text);font:inherit;cursor:pointer;transition:background-color 83ms linear,transform 83ms cubic-bezier(0,0,0,1)}
+.btn:hover{background:var(--fill-h)}.btn:active{background:var(--fill-p);color:var(--text2);transform:scale(.98)}
+.btn-a{background:var(--accent);color:var(--on-accent);border-color:rgba(255,255,255,.08)}.btn-a:hover{background:var(--accent-h)}.btn-a:active{background:var(--accent-p);color:var(--on-accent)}
+.field{padding:5px 10px;border-radius:4px;border:1px solid var(--stroke);border-bottom-color:var(--text2);background:var(--fill);color:inherit;font:inherit;transition:background-color 83ms linear}
+.field:focus,.field:focus-visible{outline:none;background:var(--card);border-bottom:2px solid var(--accent);padding-bottom:4px}
+.canvas{background-color:var(--layer);background-image:radial-gradient(var(--dot) 1.5px,transparent 2px);background-size:30px 30px;border-top:1px solid var(--stroke-s);border-left:1px solid var(--stroke-s);transition:background-color .25s linear}
+.canvas.nogrid{background-image:none}
+.obj{position:absolute;min-width:40px;min-height:40px;box-sizing:border-box;border:2px solid transparent;border-radius:8px;animation:pop 250ms cubic-bezier(0,0,0,1);transition:border-color 167ms linear,box-shadow 167ms linear}
+.obj.sel{border-color:var(--accent);z-index:1000;box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 18%,transparent)}
+.handle{position:absolute;width:8px;height:8px;background:var(--card);border:2px solid var(--accent);border-radius:50%;display:none;z-index:10}
+.obj.sel>.handle{display:block;animation:pop 167ms cubic-bezier(0,0,0,1)}
+.nw{top:-5px;left:-5px;cursor:nw-resize}.n{top:-5px;left:calc(50% - 5px);cursor:n-resize}.ne{top:-5px;right:-5px;cursor:ne-resize}.w{top:calc(50% - 5px);left:-5px;cursor:w-resize}.e{top:calc(50% - 5px);right:-5px;cursor:e-resize}.sw{bottom:-5px;left:-5px;cursor:sw-resize}.s{bottom:-5px;left:calc(50% - 5px);cursor:s-resize}.se{bottom:-5px;right:-5px;cursor:se-resize}
+.move-bar{position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:32px;height:24px;background:var(--accent);color:var(--on-accent);cursor:move;border-radius:4px 4px 0 0;display:none;align-items:center;justify-content:center}
+.obj.sel>.move-bar{display:flex;animation:fade 167ms linear}
+.inner{width:100%;height:100%;pointer-events:none;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:6px}
+.comp-btn{background:var(--accent);color:var(--on-accent);border:1px solid rgba(255,255,255,.08);width:100%;height:100%;border-radius:4px;font:inherit;font-weight:600;cursor:pointer}
+.comp-txt{color:var(--text);text-align:center;width:100%;font-size:1rem}
+.media{width:100%;height:100%;object-fit:cover;pointer-events:auto;background:#000;border-radius:4px}
+.ph{font-size:12px;color:var(--text2);border:1px dashed var(--stroke-s);width:100%;height:100%;display:flex;align-items:center;justify-content:center;border-radius:8px}
+.comp-box{border:1px dashed var(--accent);display:flex;gap:12px;padding:12px;width:100%;height:100%;box-sizing:border-box;pointer-events:auto;border-radius:8px;background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.calc-body{background:var(--card);width:100%;height:100%;border-radius:8px;display:flex;flex-direction:column;padding:10px;box-sizing:border-box;pointer-events:auto;border:1px solid var(--stroke-s)}
+.calc-display{background:var(--layer);font-family:"Segoe UI Variable Display","Segoe UI",sans-serif;font-size:20px;font-weight:600;padding:8px 10px;text-align:right;border-radius:4px;margin-bottom:8px;border:1px solid var(--stroke);overflow:hidden}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex-grow:1}
+.calc-btn{background:var(--fill);border:1px solid var(--stroke);color:var(--text);border-radius:4px;font:inherit;cursor:pointer;transition:background-color 83ms linear,transform 83ms}
+.calc-btn:hover{background:var(--fill-h)}.calc-btn:active{background:var(--fill-p);transform:scale(.96)}
+.calc-btn.op{background:var(--sub-h);color:var(--accent)}.calc-btn.eq{background:var(--accent);color:var(--on-accent)}
+.flyout{position:fixed;z-index:2000;min-width:220px;padding:4px;border-radius:8px;background:var(--card);border:1px solid var(--stroke-s);box-shadow:var(--shadow);transform-origin:top left;animation:flyout 167ms cubic-bezier(.1,.9,.2,1)}
+.mi{display:flex;align-items:center;gap:12px;height:32px;padding:0 11px;border-radius:4px;cursor:default;transition:background-color 83ms linear}
+.mi:hover{background:var(--sub-h)}.mi:active{background:var(--sub-p)}.mi .msr{color:var(--text2)}.mi.danger,.mi.danger .msr{color:var(--danger)}
+.sep{height:1px;background:var(--stroke-s);margin:4px 0}
+.mb{height:32px;padding:0 12px;border-radius:4px;border:0;background:transparent;color:var(--text);font:inherit;cursor:default;transition:background-color 83ms linear}
+.mb:hover,.mb.on{background:var(--sub-h)}.mb:active{background:var(--sub-p)}
+.tile{display:flex;align-items:center;gap:16px;text-align:left;padding:20px;border-radius:8px;border:1px solid var(--stroke-s);background:var(--card);color:var(--text);font:inherit;cursor:pointer;transition:border-color 83ms linear,background-color 83ms linear,transform 167ms cubic-bezier(0,0,0,1),box-shadow 167ms linear}
+.tile:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow)}.tile:active{transform:scale(.98);transition-duration:83ms}
+.tile-a{background:var(--accent);color:var(--on-accent);border-color:transparent}.tile-a:hover{background:var(--accent-h);border-color:transparent}
+.fadein{animation:fade 250ms linear}.about{background:var(--card);border:1px solid var(--stroke-s);box-shadow:var(--shadow);animation:fade 250ms cubic-bezier(0,0,0,1)}
+.scrim{animation:fade 167ms linear}.dlg{background:var(--card);border:1px solid var(--stroke-s);box-shadow:var(--shadow);animation:dlg 167ms cubic-bezier(0,0,0,1)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+@keyframes flyout{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes dlg{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const {useState,useRef,useEffect}=React;const html=htm.bind(React.createElement);
+const I=n=>html`<span class="msr">${n}</span>`;
+const BP=[['button','smart_button','Button'],['text','text_fields','Text'],['image','image','Image'],['video','videocam','Video'],['v-box','view_column_2','Vertical Box'],['h-box','view_week','Horizontal Box'],['calc','calculate','Calculator']];
+const KEYS=['C','/','*','-','7','8','9','+','4','5','6','=','1','2','3','0'];
+const HS=['nw','n','ne','w','e','sw','s','se'];
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function calcExpr(s){const t=s.match(/\d*\.?\d+|[+\-*\/]/g)||[];let i=0;
+ const f=()=>{let g=1;while(t[i]==='-'){g=-g;i++}const n=parseFloat(t[i++]);if(isNaN(n))throw 0;return g*n};
+ const m=()=>{let v=f();while(t[i]==='*'||t[i]==='/'){const o=t[i++],r=f();v=o==='*'?v*r:v/r}return v};
+ let v=m();while(t[i]==='+'||t[i]==='-'){const o=t[i++],r=m();v=o==='+'?v+r:v-r}
+ if(i<t.length)throw 0;return String(v)}
+const snap=(it,b)=>JSON.stringify([it.map(i=>i.data?{...i,src:''}:i),b]);
+const EXPORT_CSS=`body{font-family:sans-serif;margin:0;background-color:BG;min-height:100vh;overflow-x:hidden;position:relative}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:#6366f1;color:white;text-decoration:none;border-radius:8px;font-weight:bold;width:100%;height:100%;border:none}
+.txt{display:flex;align-items:center;justify-content:center;text-align:center;color:white;width:100%;height:100%}
+.media{width:100%;height:100%;object-fit:cover;background:black;border-radius:8px}
+.wrapper{position:absolute;box-sizing:border-box;text-decoration:none}
+.calc-body{background:#1e293b;width:100%;height:100%;border-radius:12px;display:flex;flex-direction:column;padding:10px;box-sizing:border-box;border:1px solid rgba(255,255,255,.1)}
+.calc-display{background:#0f172a;color:#10b981;font-family:monospace;font-size:1.2rem;padding:10px;text-align:right;border-radius:6px;margin-bottom:8px;border:1px solid rgba(255,255,255,.1);overflow:hidden}
+.calc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;flex-grow:1}
+.calc-btn{background:rgba(255,255,255,.05);border:none;color:white;border-radius:4px;font-size:.8rem;cursor:pointer;transition:.2s}
+.calc-btn:hover{background:#6366f1}.calc-btn.op{background:rgba(99,102,241,.2);color:#6366f1}`;
+
+function Obj({o,all,c}){
+ const kids=all.filter(k=>k.parent===o.id);
+ const ts={fontSize:o.fs?o.fs+'px':undefined,fontWeight:o.bold||undefined,color:o.color||undefined};
+ let body;
+ if(o.type==='button')body=html`<button class="comp-btn" style=${ts}>${o.text}</button>`;
+ else if(o.type==='text')body=html`<div class="comp-txt" style=${ts}>${o.text}</div>`;
+ else if(o.type==='image')body=o.src?html`<img src=${o.src} class="media"/>`:html`<div class="ph">Select Image</div>`;
+ else if(o.type==='video')body=o.src?html`<video src=${o.src} class="media" controls></video>`:html`<div class="ph">Select Video</div>`;
+ else if(o.type==='calc')body=html`<div class="calc-body"><div class="calc-display">${o.disp}</div><div class="calc-grid">${KEYS.map(v=>html`<button key=${v} class=${'calc-btn'+(isNaN(v)?(v==='='?' eq':' op'):'')} onClick=${()=>c.calc(o.id,v)}>${v}</button>`)}</div></div>`;
+ else body=html`<div data-box=${o.id} class=${'comp-box '+(o.type==='v-box'?'flex-col':'flex-row')}>${kids.map(k=>html`<${Obj} key=${k.id} o=${k} all=${all} c=${c}/>`)}</div>`;
+ return html`<div class=${'obj'+(c.sel===o.id?' sel':'')} style=${{left:o.x,top:o.y,width:o.w,height:o.h,position:o.parent?'relative':'absolute'}} onMouseDown=${e=>c.down(e,o)} onContextMenu=${e=>c.cm(e,o)}>
+  <div class="move-bar">${I('drag_indicator')}</div>
+  ${HS.map(h=>html`<div key=${h} data-h=${h} class=${'handle '+h}></div>`)}
+  <div class="inner">${body}</div></div>`}
+
+function Dialog({d,close}){
+ const [v,setV]=useState(d.value||'');
+ const run=x=>{if(!x.keep)close();x.f&&x.f(v)};
+ useEffect(()=>{const k=e=>{if(e.key==='Escape')close();if(e.key==='Enter'&&!d.area&&d.actions[0].a)run(d.actions[0])};addEventListener('keydown',k);return()=>removeEventListener('keydown',k)},[v]);
+ return html`<div class="scrim fixed inset-0 z-[3000] grid place-items-center p-4" style=${{background:'var(--scrim)'}} onClick=${e=>e.stopPropagation()} onContextMenu=${e=>e.preventDefault()}>
+  <div class="dlg w-[400px] max-w-full rounded-[8px] overflow-hidden" role="dialog">
+   <div class="p-6 pb-5"><h2 class="text-[20px] leading-[28px] font-semibold mb-2">${d.title}</h2>
+    ${d.body&&html`<p class="mb-3 mt-0" style=${{color:'var(--text2)'}}>${d.body}</p>`}
+    ${d.area?html`<textarea readOnly rows="8" class="field w-full rounded-[4px] font-mono text-[11px]" value=${d.value} onFocus=${e=>e.target.select()}></textarea>`
+     :d.label!=null&&html`<div class="mb-1" style=${{color:'var(--text2)'}}>${d.label}</div><input autoFocus class="field w-full rounded-[4px]" value=${v} onInput=${e=>setV(e.target.value)}/>`}
+   </div>
+   <div class="flex gap-2 p-6 pt-5" style=${{background:'var(--layer)',borderTop:'1px solid var(--stroke-s)'}}>${d.actions.map(x=>html`<button key=${x.l} class=${'btn flex-1 rounded-[4px] '+(x.a?'btn-a':'')} onClick=${()=>run(x)}>${x.l}</button>`)}</div>
+  </div></div>`}
+
+function About({close}){
+ useEffect(()=>{const k=e=>{if(e.key==='Escape')close()};addEventListener('keydown',k);return()=>removeEventListener('keydown',k)},[]);
+ const L=a=>html`<a href=${a} target="_blank" rel="noopener noreferrer" class="underline break-all" style=${{color:'var(--accent)'}}>${a}</a>`;
+ return html`<div class="fadein fixed inset-0 z-[3000] grid place-items-center p-4" style=${{background:'var(--scrim)'}} onClick=${e=>{e.stopPropagation();close()}} onContextMenu=${e=>e.preventDefault()}>
+  <div class="about relative w-[400px] max-w-full rounded-[8px] p-8 flex flex-col items-center text-center gap-2" role="dialog" aria-label="About" onClick=${e=>e.stopPropagation()}>
+   <button class="btn absolute top-3 right-3 !h-8 !w-8 !p-0 rounded-[4px]" aria-label="Close" onClick=${close}>${I('close')}</button>
+   <div class="w-16 h-16 rounded-[8px] grid place-items-center mb-2" style=${{background:'var(--accent)',color:'var(--on-accent)'}}><span class="msr" style=${{fontSize:36}}>web</span></div>
+   <h2 class="text-[20px] leading-[28px] font-semibold">Ambient Web Builder</h2>
+   <div>Version: 2.0</div>
+   <div>Build date: 12-Nov-2026</div>
+   <div>Source code at: ${L('https://github.com/techambient/AWB')}</div>
+   <div>Support us on: ${L('https://techambient.github.io/AWB/support')}</div>
+  </div></div>`}
+
+function Dash({onNew,onImport}){
+ const [t,setT]=useState(new Date());
+ useEffect(()=>{const i=setInterval(()=>setT(new Date()),1000);return()=>clearInterval(i)},[]);
+ const D='"Segoe UI Variable Display","Segoe UI Variable","Segoe UI",system-ui,sans-serif',M='radial-gradient(ellipse at 50% 40%,#000 30%,transparent 85%)';
+ const ic=(n,s)=>html`<span class="msr" style=${{fontSize:s}}>${n}</span>`;
+ const an=i=>({animation:'pop 250ms cubic-bezier(0,0,0,1) both',animationDelay:i*45+'ms'});
+ const card={background:'var(--card)',border:'1px solid var(--stroke-s)'};
+ const sub={background:'color-mix(in srgb,var(--accent) 14%,transparent)',color:'var(--accent)'};
+ const info=[['schedule','Time',t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'})],['today','Day',t.toLocaleDateString(undefined,{weekday:'long'})],['calendar_month','Date',t.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'})]];
+ const lab=s=>html`<div class="text-[14px] font-semibold mb-3 mt-8" style=${{color:'var(--text2)'}}>${s}</div>`;
+ const hero=(cls,i,fn,icon,title,subt,acc)=>html`<button class=${'tile '+cls} style=${{...an(i),flexDirection:'column',alignItems:'flex-start',gap:20,padding:28,minHeight:200}} onClick=${fn}>
+  <div class="w-16 h-16 rounded-[8px] grid place-items-center" style=${acc?{background:'color-mix(in srgb,var(--on-accent) 16%,transparent)'}:sub}>${ic(icon,40)}</div>
+  <div><div class="text-[22px] leading-7 font-semibold" style=${{fontFamily:D}}>${title}</div><div class="text-[14px] mt-1" style=${acc?{opacity:.85}:{color:'var(--text2)'}}>${subt}</div></div></button>`;
+ return html`<div class="h-full overflow-auto relative select-none" style=${{background:'var(--mica)'}}>
+  <div class="absolute inset-0 pointer-events-none" style=${{backgroundImage:'radial-gradient(var(--dot) 1.5px,transparent 2px)',backgroundSize:'30px 30px',WebkitMaskImage:M,maskImage:M}}></div>
+  <div class="absolute inset-x-0 top-0 h-[380px] pointer-events-none" style=${{background:'radial-gradient(60% 70% at 50% 0%,color-mix(in srgb,var(--accent) 14%,transparent),transparent)'}}></div>
+  <div class="relative min-h-full grid place-items-center p-6 sm:p-10"><div class="w-[880px] max-w-full py-6">
+   <div class="flex items-center gap-5 mb-8" style=${an(0)}>
+    <div class="w-[72px] h-[72px] shrink-0 rounded-[8px] grid place-items-center" style=${{background:'var(--accent)',color:'var(--on-accent)',boxShadow:'var(--shadow)'}}>${ic('web',40)}</div>
+    <div><div class="text-[15px]" style=${{color:'var(--text2)'}}>Ambient Web Builder</div><h1 class="text-[40px] leading-[48px] font-semibold" style=${{fontFamily:D}}>Welcome back, user</h1></div>
+   </div>
+   <div class="grid grid-cols-1 sm:grid-cols-3 rounded-[8px] overflow-hidden" style=${{...card,...an(1)}}>${info.map(([n,l,v],i)=>html`<div key=${l} class=${'flex items-center gap-4 p-5 '+(i?'border-t sm:border-t-0 sm:border-l':'')} style=${{borderColor:'var(--stroke-s)'}}>
+    <div class="w-12 h-12 shrink-0 rounded-[8px] grid place-items-center" style=${sub}>${ic(n,26)}</div>
+    <div class="min-w-0"><div class="text-[13px]" style=${{color:'var(--text2)'}}>${l}</div><div class="text-[20px] leading-7 font-semibold truncate" style=${{fontFamily:D,fontVariantNumeric:'tabular-nums'}}>${v}</div></div></div>`)}</div>
+   ${lab('Get started')}
+   <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    ${hero('tile-a',2,onNew,'add','Create New Project','Start with a blank canvas',1)}
+    ${hero('',3,onImport,'folder_open','Import Project','Open a .awb project file',0)}
+   </div>
+  </div></div></div>`}
+
+function App(){
+ const [theme,setTheme]=useState(()=>matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+ useEffect(()=>{document.documentElement.dataset.theme=theme},[theme]);
+ const [items,setItems]=useState([]),[sel,setSel]=useState(null),[menu,setMenu]=useState(null),[dlg,setDlg]=useState(null),[bg,setBg]=useState(''),[tm,setTm]=useState(null),[about,setAbout]=useState(false),[grid,setGrid]=useState(true),[screen,setScreen]=useState('dash');
+ const drag=useRef(null),cv=useRef(),imgIn=useRef(),vidIn=useRef(),colIn=useRef(),bgIn=useRef(),awbIn=useRef(),idc=useRef(0),live=useRef({}),saved=useRef(snap([],'')),tgt=useRef(null);
+ const upd=(id,p)=>setItems(a=>a.map(o=>o.id===id?{...o,...p}:o));
+ useEffect(()=>{
+  const mv=e=>{const d=drag.current;if(!d)return;const dx=e.clientX-d.sx,dy=e.clientY-d.sy;let p={};
+   if(d.act==='move')p={x:d.l+dx,y:d.t+dy};
+   else{const h=d.h;if(h.includes('e'))p.w=d.w+dx;if(h.includes('s'))p.h=d.hh+dy;if(h.includes('w')){p.w=d.w-dx;p.x=d.l+dx}if(h.includes('n')){p.h=d.hh-dy;p.y=d.t+dy}}
+   upd(d.id,p)};
+  const up=()=>{drag.current=null},cl=()=>{setMenu(null);setTm(null)};
+  addEventListener('mousemove',mv);addEventListener('mouseup',up);addEventListener('click',cl);
+  return()=>{removeEventListener('mousemove',mv);removeEventListener('mouseup',up);removeEventListener('click',cl)}},[]);
+
+ useEffect(()=>{
+  const dirty=()=>{const l=live.current;return l.screen==='editor'&&snap(l.items,l.bg)!==saved.current};
+  const bu=e=>{if(dirty()){e.preventDefault();e.returnValue='Please save your changes before exit.';return e.returnValue}};
+  const pop=()=>{if(dirty()){try{history.pushState({awb:1},'')}catch{}setDlg({title:'Unsaved changes',body:'Please save your changes before exit.',actions:[{l:'Save as .awb...',a:1,f:()=>live.current.saveAwb()},{l:'Close'}]})}else{removeEventListener('popstate',pop);history.back()}};
+  try{history.pushState({awb:1},'')}catch{}
+  addEventListener('beforeunload',bu);addEventListener('popstate',pop);
+  return()=>{removeEventListener('beforeunload',bu);removeEventListener('popstate',pop)}},[]);
+
+ const add=(type,x,y,parent)=>{const id=++idc.current,big=type.includes('box');
+  setItems(a=>[...a,{id,type,parent,x:parent?0:x,y:parent?0:y,w:type==='calc'?220:type==='video'?300:big?200:120,h:type==='calc'?300:type==='video'?200:big?150:48,text:type==='button'?'Click Me':'New Text',fs:'',bold:'',color:'',src:'',real:'',url:'',disp:'0'}])};
+ const onDrop=e=>{e.preventDefault();const type=e.dataTransfer.getData('type');if(!type)return;
+  const b=e.target.closest('[data-box]'),el=b||cv.current,r=el.getBoundingClientRect();
+  add(type,e.clientX-r.left+(b?0:el.scrollLeft),e.clientY-r.top+(b?0:el.scrollTop),b?+b.dataset.box:null)};
+ const c={sel,
+  down:(e,o)=>{e.stopPropagation();setSel(o.id);const act=e.target.closest('.move-bar')?'move':e.target.dataset.h?'resize':null;
+   if(act)drag.current={id:o.id,act,h:e.target.dataset.h||'',sx:e.clientX,sy:e.clientY,w:o.w,hh:o.h,l:o.x,t:o.y}},
+  cm:(e,o)=>{e.preventDefault();e.stopPropagation();setTm(null);setMenu({x:e.clientX,y:e.clientY,id:o.id})},
+  calc:(id,v)=>setItems(a=>a.map(o=>{if(o.id!==id)return o;let d=o.disp;
+   if(v==='C')d='0';else if(v==='='){try{d=calcExpr(d)}catch{d='Error'}}else d=(d==='0'||d==='Error')?v:d+v;return{...o,disp:d}}))};
+
+ const ask=(title,label,value,f)=>setDlg({title,label,value,actions:[{l:'OK',a:1,f},{l:'Cancel'}]});
+ const o=menu&&menu.id!=null?items.find(i=>i.id===menu.id):null;
+ const setMedia=kind=>setDlg({title:'Change '+kind+' source',body:'Upload a local file or enter a web URL.',actions:[
+  {l:'Upload file',a:1,f:()=>{tgt.current=o.id;(kind==='image'?imgIn:vidIn).current.click()}},
+  {l:'Web URL',f:()=>ask(kind[0].toUpperCase()+kind.slice(1)+' URL','Enter '+kind+' URL','',v=>v&&upd(o.id,{src:v,real:v,data:''}))},{l:'Cancel'}]});
+ const del=id=>{const gone=new Set([id]);let ch=true;while(ch){ch=false;items.forEach(i=>{if(gone.has(i.parent)&&!gone.has(i.id)){gone.add(i.id);ch=true}})}setItems(a=>a.filter(i=>!gone.has(i.id)))};
+ const file=e=>{const f=e.target.files[0],id=tgt.current;if(f){upd(id,{src:URL.createObjectURL(f),real:f.name,data:''});const r=new FileReader();r.onload=()=>upd(id,{data:r.result});r.readAsDataURL(f)}e.target.value=''};
+
+ const doExport=()=>{
+  const q=s=>esc(s).replace(/"/g,'&quot;');
+  const lk=(o,h)=>o.url?`<a href="${q(o.url)}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:inherit;text-decoration:none">${h}</a>`:h;
+  const ex=o=>{
+   const kids=items.filter(k=>k.parent===o.id),src=o.data||o.src;
+   const ts=[o.fs&&`font-size:${o.fs}px`,o.bold&&`font-weight:${o.bold}`,o.color&&`color:${o.color}`].filter(Boolean).join(';');
+   let b;
+   if(o.type==='button')b=`<button class="comp-btn" style="${ts}"${o.url?` data-url="${q(o.url)}"`:''}>${esc(o.text)}</button>`;
+   else if(o.type==='text')b=lk(o,`<div class="comp-txt" style="${ts}">${esc(o.text)}</div>`);
+   else if(o.type==='image')b=src?lk(o,`<img src="${q(src)}" class="media">`):'<div class="ph">Select Image</div>';
+   else if(o.type==='video')b=src?`<video src="${q(src)}" class="media" controls></video>`:'<div class="ph">Select Video</div>';
+   else if(o.type==='calc')b=`<div class="calc-body"><div class="calc-display">${esc(o.disp)}</div><div class="calc-grid">${KEYS.map(v=>`<button class="calc-btn${isNaN(v)?(v==='='?' eq':' op'):''}" onclick="calcAction(this,'${v}')">${v}</button>`).join('')}</div></div>`;
+   else b=`<div class="comp-box ${o.type==='v-box'?'flex-col':'flex-row'}">${kids.map(ex).join('')}</div>`;
+   return `<div class="obj" style="left:${o.x}px;top:${o.y}px;width:${o.w}px;height:${o.h}px;position:${o.parent?'relative':'absolute'}"><div class="inner">${b}</div></div>`};
+  let code=`<!DOCTYPE html><html lang="en" data-theme="${theme}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Ambient Web Builder</title><style>${document.getElementById('awb-css').textContent}\nhtml,body{height:auto}body{min-height:100vh;position:relative;overflow:auto;background:${bg||'var(--layer)'}}.inner{pointer-events:auto}.flex-col{flex-direction:column}.flex-row{flex-direction:row}</style></head><body>`;
+  code+=items.filter(i=>!i.parent).map(ex).join('');
+  code+=`<script>${calcExpr.toString()}\nfunction calcAction(btn,v){const d=btn.closest('.calc-body').querySelector('.calc-display');let s=d.innerText;if(v==='C')s='0';else if(v==='='){try{s=calcExpr(s)}catch(e){s='Error'}}else s=(s==='0'||s==='Error')?v:s+v;d.innerText=s}document.querySelectorAll('[data-url]').forEach(b=>b.onclick=()=>window.open(b.dataset.url,'_blank','noopener'));<\/script></body></html>`;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([code],{type:'text/html'}));a.download='index.html';a.click();
+  setDlg({title:'Export index.html',body:'Your page was exported. If the download did not start, copy the code below.',area:1,value:code,actions:[
+   {l:'Copy code',a:1,keep:1,f:()=>{try{navigator.clipboard.writeText(code)}catch{}}},{l:'Close'}]})};
+
+ const saveAwb=()=>{
+  const json=JSON.stringify({awb:1,version:'2.0',bg,items:items.map(i=>i.data?{...i,src:''}:i)}),small=json.length<2e6;
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));a.download='project.awb';a.click();saved.current=snap(items,bg);
+  setDlg(small?{title:'Save as .awb',body:'Your project was saved. If the download did not start, copy the project code below and save it as a .awb file.',area:1,value:json,actions:[{l:'Copy code',a:1,keep:1,f:()=>{try{navigator.clipboard.writeText(json)}catch{}}},{l:'Close'}]}:{title:'Save as .awb',body:'Your project was saved as project.awb.',actions:[{l:'OK',a:1}]})};
+ const importAwb=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;
+  const r=new FileReader();r.onload=()=>{try{const p=JSON.parse(r.result);if(!p||!Array.isArray(p.items))throw 0;
+   const it=p.items.map(i=>({parent:null,x:0,y:0,w:120,h:48,text:'',fs:'',bold:'',color:'',real:'',url:'',disp:'0',...i,src:i.data||i.src||''}));
+   saved.current=snap(it,p.bg||'');idc.current=it.reduce((m,i)=>Math.max(m,+i.id||0),0);setItems(it);setBg(p.bg||'');setSel(null);setMenu(null);setScreen('editor')}
+  catch{setDlg({title:'Import .awb',body:'This file is not a valid Ambient Web Builder project.',actions:[{l:'OK',a:1}]})}};r.readAsText(f)};
+ live.current={items,bg,screen,saveAwb};
+ const exit=()=>{try{window.close()}catch{}setTimeout(()=>{try{window.top.close()}catch{}},50);setTimeout(()=>location.replace('about:blank'),250)};
+ const tops={file:[['logout','Exit',exit]],publish:[['ios_share','Export as HTML...',doExport],['save','Save as .awb...',saveAwb],['folder_open','Import .awb...',()=>awbIn.current.click()]],view:[['grid_on','Show Grid',()=>setGrid(true)],['grid_off','Disable Grid',()=>setGrid(false)]]};
+ const txt=o&&(o.type==='button'||o.type==='text');
+ const rows=!menu?[]:o?[
+  txt&&['edit','Edit Content',()=>ask('Edit content','Update content',o.text,v=>v&&upd(o.id,{text:v}))],
+  txt&&['format_size','Text Size',()=>ask('Text size','Enter size (px)',o.fs||(o.type==='button'?'14':'16'),v=>v&&upd(o.id,{fs:v}))],
+  txt&&['format_bold','Bold / Unbold',()=>upd(o.id,{bold:o.bold==='bold'?'normal':'bold'})],
+  txt&&['palette','Text Color',()=>{tgt.current=o.id;colIn.current.click()}],
+  txt&&'-',
+  o.type==='image'&&['add_photo_alternate','Change Image Source',()=>setMedia('image')],
+  o.type==='video'&&['video_library','Change Video Source',()=>setMedia('video')],
+  ['link','Set Target URL',()=>ask('Target URL','Enter Target URL (e.g., https://google.com)',o.url,v=>upd(o.id,{url:v}))],
+  '-',['delete','Delete Object',()=>del(o.id),1]
+ ].filter(Boolean):[['format_paint','Change Background Color',()=>bgIn.current.click()]];
+
+ if(screen==='dash')return html`<div class="h-full">
+  <${Dash} onNew=${()=>setScreen('editor')} onImport=${()=>awbIn.current.click()}/>
+  <input ref=${awbIn} type="file" accept=".awb" class="hidden" onChange=${importAwb}/>
+  ${dlg&&html`<${Dialog} key=${dlg.title+dlg.value} d=${dlg} close=${()=>setDlg(null)}/>`}</div>`;
+ return html`<div class="flex flex-col h-full">
+  <div class="flex items-center gap-1 h-10 px-3 shrink-0 select-none z-20" style=${{background:'var(--mica)'}} role="menubar">
+   ${[['file','File'],['publish','Publish'],['view','View']].map(([k,l])=>html`<button key=${k} class=${'mb'+(tm&&tm.k===k?' on':'')} role="menuitem" onClick=${e=>{e.stopPropagation();setMenu(null);setTm(tm&&tm.k===k?null:{k,x:e.currentTarget.getBoundingClientRect().left})}} onMouseEnter=${e=>{if(tm&&tm.k!==k)setTm({k,x:e.currentTarget.getBoundingClientRect().left})}}>${l}</button>`)}
+   <button class="mb" role="menuitem" onClick=${e=>{e.stopPropagation();setMenu(null);setTm(null);setAbout(true)}}>About</button>
+  </div>
+  <div class="flex flex-1 min-h-0">
+  <aside class="w-[280px] shrink-0 flex flex-col gap-1 p-3 pt-4 z-10 select-none" style=${{background:'var(--mica)'}}>
+   <div class="flex items-center gap-3 px-3 pb-3"><div class="w-6 h-6 rounded-[4px] grid place-items-center" style=${{background:'var(--accent)',color:'var(--on-accent)'}}>${I('web')}</div><h1 class="text-[14px] leading-5 font-semibold">Ambient Web Builder</h1></div>
+   <div class="px-3 pb-1 text-[12px] font-semibold" style=${{color:'var(--text2)'}}>Components</div>
+   ${BP.map(([t,ic,l])=>html`<div key=${t} class="nav" draggable="true" onDragStart=${e=>{e.dataTransfer.setData('type',t);e.dataTransfer.effectAllowed='copy'}}>${I(ic)}<span>${l}</span></div>`)}
+   <div class="mt-auto flex flex-col gap-2 pt-3">
+    <button class="btn rounded-[4px]" onClick=${()=>window.open('help.html','_blank')}>${I('help')}Help Center</button>
+    <button class="btn btn-a rounded-[4px]" onClick=${doExport}>${I('ios_share')}Export index.html</button>
+    <div class="sep"></div>
+    <div class="relative grid grid-cols-2 p-[2px] rounded-[4px]" style=${{background:'var(--sub-h)',border:'1px solid var(--stroke)'}} role="radiogroup" aria-label="Theme">
+     <div class="absolute top-[2px] bottom-[2px] left-[2px] w-[calc(50%-2px)] rounded-[4px]" style=${{background:'var(--card)',border:'1px solid var(--stroke-s)',boxShadow:'0 1px 2px rgba(0,0,0,.12)',transform:theme==='dark'?'translateX(100%)':'none',transition:'transform 250ms cubic-bezier(0,0,0,1)'}}></div>
+     ${[['light','light_mode','Light'],['dark','dark_mode','Dark']].map(([k,ic,l])=>html`<button key=${k} role="radio" aria-checked=${theme===k} onClick=${()=>setTheme(k)} class="relative z-10 flex items-center justify-center gap-2 h-8 rounded-[4px] bg-transparent border-0 cursor-pointer" style=${{color:theme===k?'var(--text)':'var(--text2)',font:'inherit',transition:'color 167ms linear'}}>${I(ic)}${l}</button>`)}
+    </div>
+   </div>
+  </aside>
+  <div ref=${cv} class=${'canvas flex-1 min-w-0 relative overflow-auto rounded-tl-[8px] select-none'+(grid?'':' nogrid')} style=${{backgroundColor:bg||undefined}}
+   onDragOver=${e=>e.preventDefault()} onDrop=${onDrop}
+   onContextMenu=${e=>{e.preventDefault();if(e.target===cv.current){setTm(null);setMenu({x:e.clientX,y:e.clientY,id:null})}}}>
+   ${items.filter(i=>!i.parent).map(i=>html`<${Obj} key=${i.id} o=${i} all=${items} c=${c}/>`)}
+  </div>
+  ${menu&&html`<div key=${menu.x+'-'+menu.y} class="flyout" style=${{left:Math.min(menu.x,innerWidth-236),top:Math.min(menu.y,innerHeight-rows.length*34-12)}} onContextMenu=${e=>e.preventDefault()}>
+   ${rows.map((r,i)=>r==='-'?html`<div key=${i} class="sep"></div>`:html`<div key=${i} class=${'mi'+(r[3]?' danger':'')} onClick=${r[2]}>${I(r[0])}<span>${r[1]}</span></div>`)}</div>`}
+  ${tm&&html`<div key=${'t'+tm.k} class="flyout" style=${{left:tm.x,top:'calc(40px + env(safe-area-inset-top, 0px))'}} onContextMenu=${e=>e.preventDefault()}>${tops[tm.k].map(r=>html`<div key=${r[1]} class="mi" onClick=${r[2]}>${I(r[0])}<span>${r[1]}</span></div>`)}</div>`}
+  ${about&&html`<${About} close=${()=>setAbout(false)}/>`}
+  ${dlg&&html`<${Dialog} key=${dlg.title+dlg.value} d=${dlg} close=${()=>setDlg(null)}/>`}
+  <input ref=${imgIn} type="file" accept="image/*" class="hidden" onChange=${file}/>
+  <input ref=${vidIn} type="file" accept="video/*" class="hidden" onChange=${file}/>
+  <input ref=${colIn} type="color" class="hidden" onInput=${e=>upd(tgt.current,{color:e.target.value})}/>
+  <input ref=${bgIn} type="color" class="hidden" onInput=${e=>setBg(e.target.value)}/>
+  <input ref=${awbIn} type="file" accept=".awb" class="hidden" onChange=${importAwb}/>
+ </div></div>`}
+ReactDOM.createRoot(document.getElementById('root')).render(html`<${App}/>`);
+</script>
+</body>
+</html>
