@@ -1,6 +1,7 @@
 <div align="center">
 
 <img src="screenshot.png" width="100%"/>
+<br>
 
 <img width="200" src="icon.ico" alt="Ambient Web Builder version 2 icon" align="center">
 
